@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GemeenteConnect - UX-test</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bad-ux.css">
+    <link rel="stylesheet" href="css/good-ux.css">
+</head>
+
+<body>
+    <button id="topSwitchToggle" class="top-switch-toggle" type="button" aria-controls="topSwitch" aria-expanded="false">Toon UX-menu</button>
+    <div class="top-switch">
+        <strong>UX-test prototype:</strong>
+        <button id="showBad" class="active" type="button">Slechte UX-versie</button>
+        <button id="showGood" type="button">Goede UX-versie</button>
+        <button id="showDashboard" type="button">Onderzoeker Dashboard</button>
+        <button id="resetSession" type="button">Nieuwe Testsessie (Reset)</button>
+    </div>
+
+    <section id="researcherDashboard" class="researcher-dashboard" hidden aria-live="polite">
+        <div class="researcher-dashboard__shell">
+            <div class="researcher-dashboard__header">
+                <div>
+                    <p class="researcher-dashboard__eyebrow">Onderzoeker Dashboard</p>
+                    <h2>Live gedrag en prestatieanalyse</h2>
+                    <p>De tabel hieronder wordt automatisch bijgewerkt met interactiefouten, doorlooptijd en klikgedrag per UX-versie.</p>
+                </div>
+
+                <div class="researcher-dashboard__status" aria-live="polite">
+                    <span>Actieve versie</span>
+                    <strong id="analyticsActiveVersion">Slechte UX-versie</strong>
+                </div>
+            </div>
+
+            <div class="researcher-dashboard__table-wrap">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">UX-versie</th>
+                            <th scope="col">Interactiefouten</th>
+                            <th scope="col">Doorlooptijd</th>
+                            <th scope="col">Muisklikken</th>
+                            <th scope="col">Actieve taak</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-version-row="bad">
+                            <th scope="row">Slechte UX-versie</th>
+                            <td id="analyticsErrorsBad">0</td>
+                            <td id="analyticsTimeBad">0 sec</td>
+                            <td id="analyticsClicksBad">0</td>
+                            <td id="analyticsTaskBad">Geen actieve taak</td>
+                        </tr>
+                        <tr data-version-row="good">
+                            <th scope="row">Goede UX-versie</th>
+                            <td id="analyticsErrorsGood">0</td>
+                            <td id="analyticsTimeGood">0 sec</td>
+                            <td id="analyticsClicksGood">0</td>
+                            <td id="analyticsTaskGood">Geen actieve taak</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="badVersion" class="version active">
+        <div class="bad-site" data-version-root="bad">
+            <header class="bad-header">
+                <div class="bad-logo">GemeenteConnect</div>
+                <button id="badMobileMenuToggle" class="bad-nav-toggle" type="button" aria-label="Menu openen" aria-expanded="false">
+                    <span aria-hidden="true">☰</span>
+                </button>
+                <div id="badNavShell" class="bad-nav-shell">
+                    <nav class="bad-nav" aria-label="Slechte UX navigatie">
+                        <div class="bad-dropdown">
+                            <button class="bad-dropdown-btn" type="button">Navigatiemenu</button>
+                            <div class="bad-dropdown-content">
+                                <a href="#">Home</a>
+                                <a href="#">Info</a>
+                                <a href="#">Administratie</a>
+                                <a href="#">Loket</a>
+                                <a href="#">Diensten</a>
+                                <a href="contact.html" target="_blank">Contact</a>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </header>
+
+            <section class="bad-container" aria-label="Slechte UX hoofdinhoud">
+                <aside class="bad-box" aria-label="Slechte UX menu">
+                    <h3>Menu</h3>
+                    <div class="bad-link-list">
+                        <button type="button" onclick="badShow('info')">Algemene informatie</button>
+                        <button type="button" onclick="badShow('appointment')">Burgerzaken aanvraag module</button>
+                        <button type="button" onclick="badShow('move')">Woonplaats mutatie</button>
+                        <button type="button" onclick="badShow('docs')">Documentaire attesten</button>
+                        <button type="button" onclick="badShow('change')">Reservatiebeheer</button>
+                        <a href="contact.html" target="_blank">Contact</a>
+                    </div>
+                    <p class="bad-small-text">Let op: sommige diensten vereisen voorafgaande identificatie, correcte
+                        categorieclassificatie en verificatie van persoonlijke gegevens.</p>
+                </aside>
+
+                <section class="bad-box">
+                    <div id="bad-info" class="bad-panel">
+                        <h1>Welkom bij GemeenteConnect</h1>
+                        <p class="bad-small-text">Op deze portaalsite vindt u allerlei elektronische dienstverlening
+                            inzake burgerlijke administratie, attestaanvragen, reservatiemogelijkheden, wijzigingen in
+                            domiciliedossiers en andere procedures. Kies links de gewenste module.</p>
+                        <p class="bad-small-text">Voor sommige handelingen moet u meerdere stappen correct doorlopen.
+                            Lees alle informatie zorgvuldig voor u verdergaat.</p>
+                    </div>
+
+                    <div id="bad-appointment" class="bad-panel" style="display:none;">
+                        <h2>Burgerzaken aanvraag module</h2>
+                        <p class="bad-small-text">Gebruik dit onderdeel voor het administratief inplannen van een
+                            fysieke loketinteractie.</p>
+                        <form class="bad-form" data-form-kind="appointment" onsubmit="badSubmit(event, 'badAppointmentResult')">
+                            <label for="badAppointmentProcedure">Gecategoriseerde Dossier-Mutatie</label>
+                            <select id="badAppointmentProcedure" required>
+                                <option value="">Kies</option>
+                                <option>Identiteitsdocument vernieuwing</option>
+                                <option>Reisdocument aanvraag</option>
+                                <option>Adresdossier behandeling</option>
+                            </select>
+                            <label for="badAppointmentName">Geboorteregister Volledige Naammatrix</label>
+                            <input id="badAppointmentName" type="text" required>
+                            <label for="badAppointmentDate">Datum</label>
+                            <input id="badAppointmentDate" type="date" required inputmode="numeric">
+                            <label for="badAppointmentTime">Chronologische Allocatie-Eenheid</label>
+                            <select id="badAppointmentTime" required>
+                                <option value="">Selecteer</option>
+                                <option>09:15</option>
+                                <option>11:45</option>
+                                <option>15:10</option>
+                            </select>
+                            <button type="submit" class="bad-primary">OK / doorgaan</button>
+                        </form>
+                        <div id="badAppointmentResult" class="bad-result">Verwerking uitgevoerd. Controleer later uw
+                            dossierstatus.</div>
+                    </div>
+
+                    <div id="bad-move" class="bad-panel" style="display:none;">
+                        <h2>Woonplaats mutatie</h2>
+                        <p class="bad-small-text">Vul onderstaande velden in voor de registratie van een adresmutatie.
+                            Velden met onduidelijke status zijn verplicht indien van toepassing.</p>
+                        <form class="bad-form" data-form-kind="move" onsubmit="badSubmit(event, 'badMoveResult')">
+                            <label for="badOldAddress">Vorige domicilie</label>
+                            <input id="badOldAddress" type="text" required>
+                            <label for="badNewAddress">Nieuwe domicilie</label>
+                            <input id="badNewAddress" type="text" required>
+                            <label for="badMoveDate">Datum effectieve mutatie</label>
+                            <input id="badMoveDate" type="date" required inputmode="numeric">
+                            <label for="badFamilySelect">Gezinssamenstelling gewijzigd?</label>
+                            <select id="badFamilySelect" required>
+                                <option value="">Kies</option>
+                                <option>Ja</option>
+                                <option>Nee</option>
+                                <option>Niet van toepassing</option>
+                            </select>
+                            <button type="submit" class="bad-primary">Indienen</button>
+                        </form>
+                        <div id="badMoveResult" class="bad-result">Aanvraag opgeslagen zonder verdere bevestiging.</div>
+                    </div>
+
+                    <div id="bad-docs" class="bad-panel" style="display:none;">
+                        <h2>Documentaire attesten</h2>
+                        <form class="bad-form" data-form-kind="docs" onsubmit="badSubmit(event, 'badDocsResult')">
+                            <label for="badDocumentType">Documenttype</label>
+                            <select id="badDocumentType" required>
+                                <option value="">Kies code</option>
+                                <option>Uittreksel registers</option>
+                                <option>Attest woonst</option>
+                                <option>Bewijs gezin</option>
+                            </select>
+                            <label for="badDocReason">Reden aanvraag</label>
+                            <input id="badDocReason" type="text" required>
+                            <button type="submit" class="bad-primary">Verzenden</button>
+                        </form>
+                        <div id="badDocsResult" class="bad-result">Uw aanvraag werd geregistreerd.</div>
+                    </div>
+
+                    <div id="bad-change" class="bad-panel" style="display:none;">
+                        <h2>Reservatiebeheer</h2>
+                        <p class="bad-small-text">Gebruik dit onderdeel indien u een bestaande reservatie wil aanpassen
+                            of annuleren.</p>
+                        <form class="bad-form" data-form-kind="change" onsubmit="badSubmit(event, 'badChangeResult')">
+                            <label for="badBookingCode">Reservatiecode</label>
+                            <input id="badBookingCode" type="text" required placeholder="bv. GEM-2026-...">
+                            <label for="badChangeAction">Gewenste actie</label>
+                            <select id="badChangeAction" required>
+                                <option value="">Kies</option>
+                                <option>Wijziging</option>
+                                <option>Annulatie</option>
+                            </select>
+                            <button type="submit" class="bad-primary">Uitvoeren</button>
+                        </form>
+                        <div id="badChangeResult" class="bad-result">Actie verwerkt.</div>
+                    </div>
+                </section>
+
+                <aside class="bad-box" aria-label="Slechte UX mededelingen">
+                    <h3>Mededelingen</h3>
+                    <p class="bad-small-text">Nieuwe administratieve procedures zijn onderhevig aan interne goedkeuring
+                        en externe validatie.</p>
+                    <p class="bad-small-text">Niet-correcte aanvragen kunnen leiden tot vertragingen.</p>
+                    <div id="badWarning" class="bad-warning" role="alert" aria-live="assertive" aria-atomic="true">Let op: u moet alle velden invullen.</div>
+                </aside>
+            </section>
+        </div>
+    </section>
+
+    <section id="goodVersion" class="version">
+        <div class="good-site" data-version-root="good">
+            <header class="good-header">
+                <div class="good-header-top">Officiële online dienstverlening van de gemeente</div>
+                <div class="good-header-inner">
+                    <div class="good-logo">GemeenteConnect</div>
+                    <nav class="good-nav" aria-label="Hoofdnavigatie">
+                        <button type="button" data-section="home" onclick="goodShow('home')" class="active">Startpagina</button>
+                        <button type="button" data-section="appointment" onclick="goodShow('appointment')">Afspraak maken</button>
+                        <button type="button" data-section="move" onclick="goodShow('move')">Adreswijziging</button>
+                        <button type="button" data-section="docs" onclick="goodShow('docs')">Document aanvragen</button>
+                        <button type="button" data-section="change" onclick="goodShow('change')">Afspraak beheren</button>
+                        <button type="button" data-section="contact" onclick="goodShow('contact')">Contact</button>
+                    </nav>
+                </div>
+            </header>
+
+            <nav class="good-mobile-nav" aria-label="Mobiele navigatie">
+                <button type="button" data-section="home" onclick="goodShow('home')" class="active">
+                    <span aria-hidden="true">⌂</span>
+                    <span>Start</span>
+                </button>
+                <button type="button" data-section="appointment" onclick="goodShow('appointment')">
+                    <span aria-hidden="true">📅</span>
+                    <span>Afspraak</span>
+                </button>
+                <button type="button" data-section="move" onclick="goodShow('move')">
+                    <span aria-hidden="true">🏠</span>
+                    <span>Verhuis</span>
+                </button>
+                <button type="button" data-section="docs" onclick="goodShow('docs')">
+                    <span aria-hidden="true">📄</span>
+                    <span>Document</span>
+                </button>
+                <button type="button" data-section="change" onclick="goodShow('change')">
+                    <span aria-hidden="true">✎</span>
+                    <span>Beheer</span>
+                </button>
+                <button type="button" data-section="contact" onclick="goodShow('contact')">
+                    <span aria-hidden="true">✉</span>
+                    <span>Contact</span>
+                </button>
+            </nav>
+
+            <main class="good-container" aria-label="Goede UX hoofdinhoud">
+                <div class="good-breadcrumb">Startpagina &gt; Online loket</div>
+
+                <section id="good-home" class="good-section active">
+                    <div class="good-hero">
+                        <h1>Online loket van GemeenteConnect</h1>
+                        <p>Via dit online loket kunt u eenvoudig gemeentelijke diensten aanvragen, afspraken beheren en
+                            administratieve documenten opvragen. Kies hieronder de dienst die u nodig heeft.</p>
+                    </div>
+
+                    <div class="good-grid">
+                        <div class="good-card">
+                            <h2>Afspraak maken</h2>
+                            <p>Maak online een afspraak bij Burgerzaken voor een identiteitskaart, paspoort of andere
+                                administratieve dienst.</p>
+                            <button type="button" class="good-button" onclick="goodShow('appointment')">Afspraak maken</button>
+                        </div>
+
+                        <div class="good-card">
+                            <h2>Adreswijziging</h2>
+                            <p>Geef uw verhuis digitaal door aan de gemeente via een eenvoudige online procedure.</p>
+                            <button type="button" class="good-button" onclick="goodShow('move')">Adreswijziging doorgeven</button>
+                        </div>
+
+                        <div class="good-card">
+                            <h2>Documenten en attesten</h2>
+                            <p>Vraag officiële documenten aan zoals een attest van woonst of gezinssamenstelling.</p>
+                            <button type="button" class="good-button" onclick="goodShow('docs')">Document aanvragen</button>
+                        </div>
+
+                        <div class="good-card">
+                            <h2>Afspraak beheren</h2>
+                            <p>Bekijk, wijzig of annuleer een bestaande afspraak met uw persoonlijke afspraakcode.</p>
+                            <button type="button" class="good-button" onclick="goodShow('change')">Afspraak beheren</button>
+                        </div>
+                    </div>
+
+                        <div class="good-grid-footer">
+                        <div class="good-card">
+                            <h3>Veelgebruikte diensten</h3>
+                            <p>• Nieuwe identiteitskaart aanvragen</p>
+                            <p>• Verhuis melden</p>
+                            <p>• Attest van woonst aanvragen</p>
+                            <p>• Afspraak wijzigen of annuleren</p>
+                        </div>
+
+                        <div class="good-card">
+                            <h3>Hulp nodig?</h3>
+                            <p>Heeft u moeilijkheden met het online loket? Neem contact op met de gemeente of vraag hulp
+                                aan het onthaal.</p>
+                            <button type="button" class="good-button secondary" onclick="goodShow('contact')">Contact opnemen</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="good-contact" class="good-section good-card" style="display:none;">
+                    <h2>Contact &amp; Openingsuren Gemeente</h2>
+                    <p>U kunt ons rechtstreeks bereiken via telefoon of e-mail. Hieronder vindt u ook de actuele openingsuren van het onthaal.</p>
+
+                    <div class="good-contact-actions">
+                        <p><strong>Telefoon:</strong> <a href="tel:025550199" class="good-contact-link">02&nbsp;555&nbsp;01&nbsp;99</a> <span class="good-contact-note">Bel direct</span></p>
+                        <p><strong>E-mail:</strong> <a href="mailto:info@gemeenteconnect.be" class="good-contact-link">info@gemeenteconnect.be</a> <span class="good-contact-note">Stuur een e-mail</span></p>
+                    </div>
+
+                    <div class="good-table-wrap">
+                        <table class="good-hours-table" aria-label="Openingsuren GemeenteConnect">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Dag</th>
+                                    <th scope="col">Openingsuren</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Maandag</th>
+                                    <td>08:30 - 11:15</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Dinsdag</th>
+                                    <td>08:30 - 11:15</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Woensdag</th>
+                                    <td>14:00 - 15:45</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Donderdag</th>
+                                    <td>08:30 - 11:15</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Vrijdag</th>
+                                    <td>08:30 - 12:00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button type="button" class="good-button secondary" onclick="goodShow('home')">Terug naar startpagina</button>
+                </section>
+
+                <section id="good-appointment" class="good-section">
+                    <div class="good-card">
+                        <div class="step-indicator">
+                            <span class="step active">Stap 1: dienst kiezen</span>
+                            <span class="step">Stap 2: gegevens invullen</span>
+                            <span class="step">Stap 3: bevestigen</span>
+                        </div>
+                        <h2>Afspraak maken bij Burgerzaken</h2>
+                        <div class="good-info-box">Vul alle velden in. Na het bevestigen krijgt u meteen een melding op
+                            het scherm.</div>
+                        <form class="good-form" data-form-kind="appointment" onsubmit="goodSubmit(event, 'goodAppointmentSuccess')">
+                            <label for="goodService">Waarvoor wilt u een afspraak maken?</label>
+                            <select id="goodService" required>
+                                <option value="">Kies een dienst</option>
+                                <option>Nieuwe identiteitskaart</option>
+                                <option>Paspoort aanvragen</option>
+                                <option>Adreswijziging bespreken</option>
+                            </select>
+                            <div id="goodServiceMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <label for="goodName">Naam</label>
+                            <input id="goodName" type="text" required placeholder="Voornaam en familienaam" autocomplete="name">
+                            <div id="goodNameMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <label for="goodDate">Datum</label>
+                            <input id="goodDate" type="date" required inputmode="numeric">
+                            <div id="goodDateMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <label for="goodTime">Tijdstip</label>
+                            <select id="goodTime" required>
+                                <option value="">Kies een tijdstip</option>
+                                <option>09:00</option>
+                                <option>11:00</option>
+                                <option>14:00</option>
+                            </select>
+                            <div id="goodTimeMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <button type="submit" class="good-button">Afspraak bevestigen</button>
+                        </form>
+                        <div id="goodAppointmentSuccess" class="good-success-screen" style="display:none;">
+                            <div class="good-success-icon">✓</div>
+                            <h2>Uw afspraak is succesvol bevestigd!</h2>
+                            <p>U mag deze pagina nu veilig sluiten of terugkeren naar de startpagina.</p>
+                            <button type="button" class="good-button secondary" onclick="goodShow('home')">Terug naar startpagina</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="good-move" class="good-section">
+                    <div class="good-card">
+                        <div class="step-indicator">
+                            <span class="step active">Stap 1: oud adres</span>
+                            <span class="step">Stap 2: nieuw adres</span>
+                            <span class="step">Stap 3: verzenden</span>
+                        </div>
+                        <h2>Adreswijziging doorgeven</h2>
+                        <div class="good-info-box">Geef uw adreswijziging digitaal door. De gemeente verwerkt uw
+                            aanvraag daarna administratief.</div>
+                        <form class="good-form" data-form-kind="move" onsubmit="goodSubmit(event, 'goodMoveSuccess')">
+                            <label for="oldAddress">Oud adres</label>
+                            <input id="oldAddress" type="text" required placeholder="Straat, nummer, postcode en gemeente" autocomplete="address-line1">
+                            <div id="oldAddressMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <label for="newAddress">Nieuw adres</label>
+                            <input id="newAddress" type="text" required placeholder="Straat, nummer, postcode en gemeente" autocomplete="address-line1">
+                            <div id="newAddressMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <label for="moveDate">Datum van verhuis</label>
+                            <input id="moveDate" type="date" required inputmode="numeric">
+                            <div class="good-help">Gebruik de datum waarop u effectief op het nieuwe adres woont.</div>
+                            <div id="moveDateMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <button type="submit" class="good-button">Adreswijziging verzenden</button>
+                        </form>
+                        <div id="goodMoveSuccess" class="good-success-screen" style="display:none;">
+                            <div class="good-success-icon">✓</div>
+                            <h2>Uw adreswijziging is succesvol verzonden!</h2>
+                            <p>U mag deze pagina nu veilig sluiten of terugkeren naar de startpagina.</p>
+                            <button type="button" class="good-button secondary" onclick="goodShow('home')">Terug naar startpagina</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="good-docs" class="good-section">
+                    <div class="good-card">
+                        <h2>Document aanvragen</h2>
+                        <div class="good-info-box">Kies het document dat u nodig heeft. U hoeft geen administratieve
+                            codes te kennen.</div>
+                        <form class="good-form" data-form-kind="docs" onsubmit="goodSubmit(event, 'goodDocsSuccess')">
+                            <label for="docType">Welk document wilt u aanvragen?</label>
+                            <select id="docType" required>
+                                <option value="">Kies een document</option>
+                                <option>Attest van woonst</option>
+                                <option>Bewijs van gezinssamenstelling</option>
+                                <option>Uittreksel uit het bevolkingsregister</option>
+                            </select>
+                            <div id="docTypeMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <label for="docReason">Reden van aanvraag</label>
+                            <input id="docReason" type="text" required placeholder="Bijvoorbeeld: werk, school of administratie" autocomplete="off">
+                            <div id="docReasonMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <button type="submit" class="good-button">Documentaanvraag verzenden</button>
+                        </form>
+                        <div id="goodDocsSuccess" class="good-success-screen" style="display:none;">
+                            <div class="good-success-icon">✓</div>
+                            <h2>Uw documentaanvraag is succesvol verzonden!</h2>
+                            <p>U mag deze pagina nu veilig sluiten of terugkeren naar de startpagina.</p>
+                            <button type="button" class="good-button secondary" onclick="goodShow('home')">Terug naar startpagina</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="good-change" class="good-section">
+                    <div class="good-card">
+                        <h2>Afspraak wijzigen of annuleren</h2>
+                        <div class="good-info-box">Gebruik de afspraakcode die u kreeg bij het maken van uw afspraak.
+                        </div>
+                        <form class="good-form" data-form-kind="change" onsubmit="goodSubmit(event, 'goodChangeSuccess')">
+                            <label for="bookingCode">Afspraakcode</label>
+                            <input id="bookingCode" type="text" required placeholder="Bijvoorbeeld: GEM-2026-1234" inputmode="text" autocomplete="off">
+                            <div id="bookingCodeMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <label for="changeAction">Wat wilt u doen?</label>
+                            <select id="changeAction" required>
+                                <option value="">Kies een actie</option>
+                                <option>Afspraak wijzigen</option>
+                                <option>Afspraak annuleren</option>
+                            </select>
+                            <div id="changeActionMessage" class="good-field-message" aria-live="polite"></div>
+
+                            <button type="submit" class="good-button">Keuze bevestigen</button>
+                        </form>
+                        <div id="goodChangeSuccess" class="good-success-screen" style="display:none;">
+                            <div class="good-success-icon">✓</div>
+                            <h2>Uw wijziging is succesvol verwerkt!</h2>
+                            <p>U mag deze pagina nu veilig sluiten of terugkeren naar de startpagina.</p>
+                            <button type="button" class="good-button secondary" onclick="goodShow('home')">Terug naar startpagina</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </section>
+
+    <script src="js/validation.js"></script>
+    <script src="js/navigation.js"></script>
+</body>
+
+</html>
+
